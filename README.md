@@ -10,9 +10,10 @@ npm install
 # 1) env
 cp .env.example .env
 
-# 2) база (SQLite)
-npm run db:push
-npm run db:seed
+# 2) база (Postgres)
+# Потрібно виставити DATABASE_URL у .env
+npm run db:push   # для dev (швидко)
+npm run db:seed   # демо-дані
 
 # 3) dev server
 npm run dev
@@ -39,7 +40,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Деплой на Vercel (рекомендовано)
+
+1) **Створи Postgres**:
+- через Vercel → **Storage → Postgres** (або Neon/Supabase)
+
+2) **Додай env у Vercel Project → Settings → Environment Variables**:
+- **`DATABASE_URL`** (обовʼязково)
+- **`OPENAI_API_KEY`** (опційно, для AI)
+
+3) **Build**:
+- у репозиторії є `vercel.json`, який ставить Build Command: `npm run vercel-build`
+- він виконує: `prisma generate` → `prisma migrate deploy` → `next build`
+
+4) **Після деплою**:
+- відкрий `/candidates`
+- за потреби локально виконай `npm run db:seed` (seed **не** запускається автоматично на Vercel).
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
